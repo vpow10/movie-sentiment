@@ -15,6 +15,7 @@ LABELS = {0: "Negative", 1: "Positive"}
 def predict_sentiment(text: str) -> tuple[str, float]:
     model = _load_model()
     proba = model.predict_proba([text])[0]
+    print(proba)
     score_pos = float(proba[1])
     label = LABELS[1 if score_pos >= 0.5 else 0]
     return label, score_pos
