@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h5 class="card-title mb-3">Analyze a review</h5>
+                <form id="analyze-form" method="post" action="{% url 'predict' %}"
+                      hx-post="{% url 'predict' %}" hx-target="#result" hx-swap="innerHTML">
+                    {% csrf_token %}
+                    <div class="mb-3">{{ form.text }}</div>
+                    <div class="d-flex gap-2 align-items-center">
+                        <button class="btn btn-primary" type="submit">Analyze</button>
+                        <div hx-indicator class="spinner-border spinner-border-sm" role="status"></div>
+                    </div>
+                </form>
+
+                <div class="mt-4" id="result"><!-- partial renders here --></div>
+
+                <div class="mt-4 small text-muted">Try:
+                    <span class="badge text-bg-secondary me-1" onclick="fill('An absolute masterpiece with stellar performances.')">positive</span>
+                    <span class="badge text-bg-secondary" onclick="fill('Boring plot and wooden acting. Completely disappointing.')">negative</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h6 class="card-title">Recent analyses</h6>
+                <ul class="list-group list-group-flush">
+                    {% for r in recent %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="text-truncate" style="max-width: 70%">{{ r.text|truncatechars:40 }}</span>
+                            {% if r.predicted_label == 'Positive' %}
+                                <span class="badge badge-pos">{{ r.predicted_label }}</span>
+                            {% else %}
+                                <span class="badge badge-neg">{{ r.predicted_label }}</span>
+                            {% endif %}
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">No analyses yet.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function fill(t){ document.querySelector('#id_text').value = t; }
+</script>
+{% endblock %}
+    
