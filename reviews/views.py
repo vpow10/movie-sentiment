@@ -1,8 +1,9 @@
-from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse
+from django.shortcuts import render
+
 from .forms import ReviewForm
-from .services import predict_sentiment
 from .models import Review
+from .services import predict_sentiment
 
 
 def index(request: HttpRequest) -> HttpResponse:
@@ -14,12 +15,16 @@ def index(request: HttpRequest) -> HttpResponse:
 def predict(request: HttpRequest) -> HttpResponse:
     if request.method != "POST":
         form = ReviewForm()
-        return render(request, "reviews/_result.html", {"error": "POST a review to analyze.", "form": form})
-    
+        return render(
+            request,
+            "reviews/_result.html",
+            {"error": "POST a review to analyze.", "form": form},
+        )
+
     form = ReviewForm(request.POST)
     if not form.is_valid():
         return render(request, "reviews/_result.html", {"form": form})
-    
+
     text = form.cleaned_data["text"]
     label, score = predict_sentiment(text)
     Review.objects.create(text=text, predicted_label=label, score=score)
