@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.DS_Store
+reviews/ml/model.joblib
+reviews/ml/*.cache/
