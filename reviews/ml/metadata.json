@@ -1,0 +1,8 @@
+{
+  "accuracy": 0.9101,
+  "elapsed_sec": 20.1702938079834,
+  "classes": {
+    "0": "negative",
+    "1": "positive"
+  }
+}
