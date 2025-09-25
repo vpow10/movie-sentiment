@@ -8,6 +8,7 @@ jobs:
       - uses: actions/setup-python@v5
         with: { python-version: '3.11' }
       - run: pip install -r requirements.txt
+      - run: python reviews/ml/train_model.py
       - run: black --check .
       - run: isort --check-only .
       - run: flake8 .
