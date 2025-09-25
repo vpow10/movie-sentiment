@@ -1,5 +1,6 @@
 from functools import lru_cache
 from pathlib import Path
+
 import joblib
 
 
@@ -7,10 +8,14 @@ import joblib
 def _load_model():
     path = Path(__file__).resolve().parent / "ml" / "model.joblib"
     if not path.exists():
-        raise FileNotFoundError("Model artifact not found. Run reviews/ml/train_model.py")
+        raise FileNotFoundError(
+            "Model artifact not found. Run reviews/ml/train_model.py"
+        )
     return joblib.load(path)
 
+
 LABELS = {0: "Negative", 1: "Positive"}
+
 
 def predict_sentiment(text: str) -> tuple[str, float]:
     model = _load_model()
